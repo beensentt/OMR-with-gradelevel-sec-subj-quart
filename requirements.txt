@@ -1,0 +1,7 @@
+flask
+imutils
+numpy==1.22.0
+opencv-python
+scipy
+flask_fontawesome
+wtforms

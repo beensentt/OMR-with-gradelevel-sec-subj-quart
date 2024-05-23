@@ -1,0 +1,75 @@
+{% extends "layout.html" %} 
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-xs-12 text-center justify-content-center">
+            <h2>Upload the exam papers</h2>
+            <form
+                method="post"
+                action="/uploadPapers"
+                enctype="multipart/form-data"
+            >
+                <input
+                    id="papers"
+                    type="file"
+                    name="files[]"
+                    multiple="true"
+                    autocomplete="off"
+                    required
+                />
+                <button class="btn btn-gray" type="submit">
+                    <i class="fas fa-cloud-upload-alt"></i>&nbsp;Upload
+                </button>
+            </form>
+            <br />
+            {% include "includes/success.html" %} 
+            {% include "includes/error.html" %}
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-3 col-xs-6 justify-content-center">
+            <table class="table table-hover text-center">
+                <thead>
+                    <tr>
+                        <th colspan="4">Answer Key</th>
+                    </tr>
+                </thead>
+                <tbody>
+                                        {% if answer_key|length <= 10 %}
+                        {% for ans in answer_key %}
+                            <tr>
+                                <th>{{ loop.index }}</th>
+                                <td>{{ ans }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        {% for i in range(answer_key|length // 2) %}
+                            <tr>
+                                <th>{{ i + 1 }}</th>
+                                <td>{{ answer_key[i*2] }}</td>
+                                {% if i*2 + 1 < answer_key|length %}
+                                    <th>{{ i + 1 + answer_key|length // 2 }}</th>
+                                    <td>{{ answer_key[i*2 + 1] }}</td>
+                                {% else %}
+                                    <th>{{ i + 1 + answer_key|length // 2 }}</th>
+                                    <td></td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        {% if answer_key|length % 2 != 0 %}
+                            <tr>
+                                <th>{{ answer_key|length }}</th>
+                                <td>{{ answer_key[-1] }}</td>
+                                <th></th>
+                                <td></td>
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+
+                
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-xs-12 text-center">
+            <h2>Upload the Answer Key</h2>
+            {% include "includes/error.html" %}
+            
+                
+            <br/>
+            <form
+                id="uploadForm" 
+                class="justify-content-between"
+                method="post"
+                action="/uploadAnswerKey"
+                enctype="multipart/form-data"
+                onsubmit="return validateDropdowns();" 
+            >
+                <div class="imgUp">
+                    <div class="imagePreview" id="preview">
+                        <input
+                            id="answerKey"
+                            class="uploadFile img choose"
+                            type="file"
+                            name="file"
+                            autocomplete="off"
+                            required
+                        />
+                        <button id="uploadBtn" class="choose btn btn-gray" type="submit" enabled> <!-- added id to the button and disabled by default -->
+                            <i class="fas fa-cloud-upload-alt"></i>&nbsp;Upload
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dropdown-container {
+        display: inline-block;
+        margin-right: 10px; /* Adjust margin as needed */
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+   
+        // Send form data to server using AJAX
+        $.ajax({
+            url: "/uploadAnswerKey",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Handle success response
+                console.log("Upload successful");
+                // Redirect to desired page
+                window.location.href = "/uploadPapers";
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error("Error uploading file:", error);
+            }
+        });
+        
+        // Prevent default form submission
+        return false;
+   
+
+    // Add event listener to the form submission
+    $("#uploadForm").submit(submitForm);
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

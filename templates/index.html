@@ -1,0 +1,458 @@
+{% extends "layout.html" %}
+{% block body %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+<div class="container">
+    <div class="jumbotron text-center">
+        <h1>Optical Mark Recognition</h1>
+        <hr>
+        <a class="btn btn-lg btn-gray" href="uploadAnswerKey" role="button">Get Started</a>
+    </div>
+
+    <div>
+        <h3>Blank Answer Sheets</h3>
+    </div>
+
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#tab1">Option 1</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#tab2">Option 2</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+
+
+          <div id="tab1" class="tab-pane fade show active">
+    <div>
+    <p>Written LRN and Name</p>
+</div>
+
+<!-- Start of dropdowns for filters -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-3 col-md-6 col-sm-12 text-center dropdown-container">
+            <div class="dropdown-item-container">
+                <button class="btn btn-dark dropdown-toggle" id="gradeDropdownBtn" data-toggle="dropdown" aria-expanded="false">
+                    Grade Level
+                </button>
+                <ul class="dropdown-menu" id="gradeDropdownMenu" aria-labelledby="gradeDropdownBtn">
+                    <!-- Dropdown options will be dynamically populated here -->
+                </ul>
+                <div id="selectedGrade"></div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 text-center dropdown-container">
+            <div class="dropdown-item-container">
+                <button class="btn btn-dark dropdown-toggle" id="sectionDropdownBtn" data-toggle="dropdown" aria-expanded="false">
+                    Section
+                </button>
+                <ul class="dropdown-menu" id="sectionDropdownMenu" aria-labelledby="sectionDropdownBtn">
+                    <!-- Dropdown options will be dynamically populated here -->
+                </ul>
+                <div id="selectedSection"></div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 text-center dropdown-container">
+            <div class="dropdown-item-container">
+                <button class="btn btn-dark dropdown-toggle" id="subjectDropdownBtn" data-toggle="dropdown" aria-expanded="false">
+                    Subject
+                </button>
+                <ul class="dropdown-menu" id="subjectDropdownMenu" aria-labelledby="subjectDropdownBtn">
+                    <!-- Dropdown options will be dynamically populated here -->
+                </ul>
+                <div id="selectedSubject"></div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 text-center dropdown-container">
+            <div class="dropdown-item-container">
+                <button class="btn btn-dark dropdown-toggle" id="quarterDropdownBtn" data-toggle="dropdown" aria-expanded="false">
+                    Quarter
+                </button>
+                <ul class="dropdown-menu" id="quarterDropdownMenu" aria-labelledby="quarterDropdownBtn">
+                    <!-- Dropdown options will be dynamically populated here -->
+                </ul>
+                <div id="selectedQuarter"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br/>
+    <button class="btn btn-primary" id="downloadPdfBtn">Download Cover Page</button>
+    
+
+<br/>
+
+
+                <!--End of dropdowns for filters-->
+
+
+                <!-- Start of Accordion and its contents-->
+                <div class="accordion" id="accordionTab1">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne1">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne1" aria-expanded="false" aria-controls="collapseOne1">
+                                10 Items 
+                            </button>
+                        </h2>
+                        <div id="collapseOne1" class="accordion-collapse collapse" aria-labelledby="headingOne1" data-bs-parent="#accordionTab1">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-row justify-content-between">
+                                    <!-- Button and Image for 10 items Small -->
+                                    <div class="flex-grow-1 me-2">
+                                        <button type="button" class="btn btn-secondary q-button" onclick="toggleImage('displayedImageSmall');">
+                                            Small
+                                        </button>
+                                        <img id="displayedImageSmall" class="img-fluid q-photo" style="max-width: 300px; display: none;" src="/static/images/imagesfordisplay/Small/10-Small.png" alt="Blank Key" onclick="toggleFileDownload('/static/images/OMR-SHEET(withcoverLetter)/MATH/SMALL/G7S1MATH1Q-10SMALL.docx');">
+                                    </div>
+                            
+                                    <!-- Button and Image for 10 items Large -->
+                                    <div class="flex-grow-1 mx-2">
+                                        <button type="button" class="btn btn-secondary q-button" onclick="toggleImage('displayedImageMedium');">
+                                            Medium
+                                        </button>
+                                        <img id="displayedImageMedium" class="img-fluid q-photo" style="max-width: 300px; display: none;" src="/static/images/imagesfordisplay/Medium/10-Medium.png" alt="Blank Key" onclick="toggleFileDownload('/static/images/OMR-SHEET(withcoverLetter)/MATH/MEDIUM/G7S1MATH1Q-10MEDIUM.docx');">
+                                    </div>
+                                    
+                            
+                                    <!-- Button and Image for 10 items Large -->
+                                    <div class="flex-grow-1 ms-2">
+                                        <button type="button" class="btn btn-secondary q-button" onclick="toggleImage('displayedImageLarge');">
+                                            Large
+                                        </button>
+                                        <img id="displayedImageLarge" class="img-fluid q-photo" style="max-width: 300px; display: none;" src="/static/images/imagesfordisplay/Large/10-Large.png" alt="Blank Key" onclick="toggleFileDownload('/static/images/OMR-SHEET(withcoverLetter)/MATH/LARGE/G7S1MATH1Q-10LARGE.docx');">
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne2" aria-expanded="false" aria-controls="collapseOne2">
+                                20 Items 
+                            </button>
+                        </h2>
+                        <div id="collapseOne2" class="accordion-collapse collapse" aria-labelledby="headingOne2" data-bs-parent="#accordionTab1">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-row justify-content-between">
+                                    <!-- Button and Image for 20 items Small -->
+                                    <div class="flex-grow-1 me-2">
+                                        <button type="button" class="btn btn-secondary q-button" onclick="toggleImage('displayedImage20Small');">
+                                            Small
+                                        </button>
+                                        <img id="displayedImage20Small" class="img-fluid q-photo" style="max-width: 300px; display: none;" src="/static/images/imagesfordisplay/Small/20-Small.png" alt="Blank Key" onclick="toggleFileDownload('/static/images/OMR-SHEET(withcoverLetter)/MATH/SMALL/G7S1MATH1Q-20SMALL.docx');">
+                                    </div>
+                    
+                                    <!-- Button and Image for 20 items Large -->
+                                    <div class="flex-grow-1 mx-2">
+                                        <button type="button" class="btn btn-secondary q-button" onclick="toggleImage('displayedImage20Medium');">
+                                            Medium
+                                        </button>
+                                        <img id="displayedImage20Medium" class="img-fluid q-photo" style="max-width: 300px; display: none;" src="/static/images/imagesfordisplay/Medium/20-Medium.png" alt="Blank Key" onclick="toggleFileDownload('/static/images/OMR-SHEET(withcoverLetter)/MATH/MEDIUM/G7S1MATH1Q-20MEDIUM.docx');">
+                                    </div>
+                    
+                                    <!-- Button and Image for 20 items Large -->
+                                    <div class="flex-grow-1 ms-2">
+                                        <button type="button" class="btn btn-secondary q-button" onclick="toggleImage('displayedImage20Large');">
+                                            Large
+                                        </button>
+                                        <img id="displayedImage20Large" class="img-fluid q-photo" style="max-width: 300px; display: none;" src="/static/images/imagesfordisplay/Large/20-Large.png" alt="Blank Key" onclick="toggleFileDownload('/static/images/OMR-SHEET(withcoverLetter)/MATH/LARGE/G7S1MATH1Q-10LARGE.docx');">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne3">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne3" aria-expanded="false" aria-controls="collapseOne3">
+                                40 Items 
+                            </button>
+                        </h2>
+                        <div id="collapseOne3" class="accordion-collapse collapse" aria-labelledby="headingOne3" data-bs-parent="#accordionTab1">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-row justify-content-between">
+                                    <!-- Button and Image for 40 items Small -->
+                                    <div class="flex-grow-1 me-2">
+                                        <button type="button" class="btn btn-secondary q-button" onclick="toggleImage('displayedImage40Small');">
+                                            Small
+                                        </button>
+                                        <img id="displayedImage40Small" class="img-fluid q-photo" style="max-width: 300px; display: none;" src="/static/images/imagesfordisplay/Small/40-Small.png" alt="Blank Key" onclick="toggleFileDownload('/static/images/OMR-SHEET(withcoverLetter)/MATH/SMALL/G7S1MATH1Q-40SMALL.docx');">
+                                    </div>
+                    
+                                    <!-- Button and Image for 40 items Large -->
+                                    <div class="flex-grow-1 mx-2">
+                                        <button type="button" class="btn btn-secondary q-button" onclick="toggleImage('displayedImage40Medium');">
+                                            Medium
+                                        </button>
+                                        <img id="displayedImage40Medium" class="img-fluid q-photo" style="max-width: 300px; display: none;" src="/static/images/imagesfordisplay/Medium/40-Medium.png" alt="Blank Key" onclick="toggleFileDownload('/static/images/OMR-SHEET(withcoverLetter)/MATH/MEDIUM/G7S1MATH1Q-40MEDIUM.docx');">
+                                    </div>
+                    
+                                    <!-- Button and Image for 40 items Large -->
+                                    <div class="flex-grow-1 ms-2">
+                                        <button type="button" class="btn btn-secondary q-button" onclick="toggleImage('displayedImage40Large');">
+                                            Large
+                                        </button>
+                                        <img id="displayedImage40Large" class="img-fluid q-photo" style="max-width: 300px; display: none;" src="/static/images/imagesfordisplay/Large/40-Large.png" alt="Blank Key" onclick="toggleFileDownload('/static/images/OMR-SHEET(withcoverLetter)/MATH/LARGE/G7S1MATH1Q-40LARGE.docx');">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne4">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne4" aria-expanded="false" aria-controls="collapseOne4">
+                                50 Items 
+                            </button>
+                        </h2>
+                        <div id="collapseOne4" class="accordion-collapse collapse" aria-labelledby="headingOne4" data-bs-parent="#accordionTab1">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-row justify-content-between">
+                                    <!-- Button and Image for 50 items Small -->
+                                    <div class="flex-grow-1 me-2">
+                                        <button type="button" class="btn btn-secondary q-button" onclick="toggleImage('displayedImage50Small');">
+                                            Small
+                                        </button>
+                                        <img id="displayedImage50Small" class="img-fluid q-photo" style="max-width: 300px; display: none;" src="/static/images/imagesfordisplay/Small/50-Small.png" alt="Blank Key" onclick="toggleFileDownload('/static/images/OMR-SHEET(withcoverLetter)/MATH/SMALL/G7S1MATH1Q-50SMALL.docx');">
+                                    </div>
+
+                                    <!-- Button and Image for 50 items Large -->
+                                    <div class="flex-grow-1 mx-2">
+                                        <button type="button" class="btn btn-secondary q-button" onclick="toggleImage('displayedImage50Medium');">
+                                            Medium
+                                        </button>
+                                        <img id="displayedImage50Medium" class="img-fluid q-photo" style="max-width: 300px; display: none;" src="/static/images/imagesfordisplay/Medium/50-Medium.png" alt="Blank Key" onclick="toggleFileDownload('/static/images/OMR-SHEET(withcoverLetter)/MATH/MEDIUM/G7S1MATH1Q-50MEDIUM.docx');">
+                                    </div>
+
+                                    <!-- Button and Image for 50 items Large -->
+                                    <div class="flex-grow-1 ms-2">
+                                        <button type="button" class="btn btn-secondary q-button" onclick="toggleImage('displayedImage50Large');">
+                                            Large
+                                        </button>
+                                        <img id="displayedImage50Large" class="img-fluid q-photo" style="max-width: 300px; display: none;" src="/static/images/imagesfordisplay/Large/50-Large.png" alt="Blank Key" onclick="toggleFileDownload('/static/images/OMR-SHEET(withcoverLetter)/MATH/LARGE/G7S1MATH1Q-50LARGE.docx');">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        
+
+
+        </div>
+
+
+
+    </div>
+</div>
+
+
+
+
+    <!-- Include jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Function to handle PDF download
+        $('#downloadPdfBtn').click(function () {
+            // Get selected options from dropdowns
+            var grade_level = $('#gradeDropdownBtn').text().trim();
+            var section = $('#sectionDropdownBtn').text().trim();
+            var subject = $('#subjectDropdownBtn').text().trim();
+            var quarter = $('#quarterDropdownBtn').text().trim();
+            
+            // Make an AJAX request to generate the PDF
+            $.ajax({
+                type: 'GET',
+                url: '/generate_pdf',
+                data: {
+                    grade_level: grade_level,
+                    section: section,
+                    subject: subject,
+                    quarter: quarter
+                },
+                success: function(response) {
+                    // Create a download link for the PDF
+                    var link = document.createElement('a');
+                    link.href = 'data:application/pdf;base64,' + response.pdfData;
+                    link.download = 'Cover_Page.pdf';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+<!-- End of function for download button for cover -->
+
+
+
+  <!--Script tag for functionality of dropdowns (fetching data from database)-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Function to fetch data for the grade dropdown
+        function fetchGradeDropdownData() {
+            $.get("/grade_dropdown_data", function (data) {
+                // Clear existing dropdown options
+                $("#gradeDropdownMenu").empty();
+                // Populate dropdown options dynamically
+                data.forEach(function (option) {
+                    $("#gradeDropdownMenu").append("<li><a class='dropdown-item' href='#' onclick='selectDropdownOption(this)'>" + option + "</a></li>");
+                });
+            });
+        }
+
+        // Function to fetch data for the section dropdown
+        function fetchSectionDropdownData() {
+            $.get("/section_dropdown_data", function (data) {
+                // Clear existing dropdown options
+                $("#sectionDropdownMenu").empty();
+                // Populate dropdown options dynamically
+                data.forEach(function (option) {
+                    $("#sectionDropdownMenu").append("<li><a class='dropdown-item' href='#' onclick='selectDropdownOption(this)'>" + option + "</a></li>");
+                });
+            });
+        }
+
+        // Function to fetch data for the subject dropdown
+        function fetchSubjectDropdownData() {
+            $.get("/subject_dropdown_data", function (data) {
+                // Clear existing dropdown options
+                $("#subjectDropdownMenu").empty();
+                // Populate dropdown options dynamically
+                data.forEach(function (option) {
+                    $("#subjectDropdownMenu").append("<li><a class='dropdown-item' href='#' onclick='selectDropdownOption(this)'>" + option + "</a></li>");
+                });
+            });
+        }
+
+        // Function to fetch data for the quarter dropdown
+        function fetchQuarterDropdownData() {
+            $.get("/quarter_dropdown_data", function (data) {
+                // Clear existing dropdown options
+                $("#quarterDropdownMenu").empty();
+                // Populate dropdown options dynamically
+                data.forEach(function (option) {
+                    $("#quarterDropdownMenu").append("<li><a class='dropdown-item' href='#' onclick='selectDropdownOption(this)'>" + option + "</a></li>");
+                });
+            });
+        }
+
+        // Call the fetch functions when the page loads
+        fetchGradeDropdownData();
+        fetchSectionDropdownData();
+        fetchSubjectDropdownData();
+        fetchQuarterDropdownData();
+    });
+
+    // Function to select the dropdown option and update the dropdown name
+    function selectDropdownOption(element) {
+        var selectedOption = $(element).text();
+        var dropdownId = $(element).closest(".dropdown-item-container").find("button").attr("id");
+        $("#" + dropdownId).text(selectedOption);
+    }
+</script>
+<!--End of script tag for dropdowns-->
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    function toggleFileDownload(fileUrl) {
+        // Create a dummy anchor element
+        var anchor = document.createElement('a');
+        anchor.href = fileUrl;
+        anchor.download = '';
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+    }
+</script>
+
+
+
+<script>
+    // Close other accordion items when one is opened
+    document.querySelectorAll('.accordion-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const collapseParent = button.closest('.accordion');
+            const collapseTargets = collapseParent.querySelectorAll('.accordion-collapse');
+
+            collapseTargets.forEach(collapseItem => {
+                if (collapseItem !== button.nextElementSibling) {
+                    collapseItem.classList.remove('show');
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    function toggleImage(imageId) {
+        var imageElement = document.getElementById(imageId);
+        if (imageElement.style.display === 'none') {
+            imageElement.style.display = 'block';
+        } else {
+            imageElement.style.display = 'none';
+        }
+    }
+
+    function downloadImage(imageUrl) {
+        var link = document.createElement('a');
+        link.href = imageUrl;
+        link.download = '';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+<script>
+    // Close other accordion items when one is opened
+    document.querySelectorAll('.accordion-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const collapseParent = button.closest('.accordion');
+            const collapseTargets = collapseParent.querySelectorAll('.accordion-collapse');
+
+            collapseTargets.forEach(collapseItem => {
+                if (collapseItem !== button.nextElementSibling) {
+                    collapseItem.classList.remove('show');
+                }
+            });
+        });
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
+{% endblock %}

@@ -1,0 +1,407 @@
+{% extends "layout.html" %} 
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-xs-12 text-center">
+            <h2>Results</h2>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-3 col-md-6 col-sm-12 text-center dropdown-container">
+            <div class="dropdown-item-container">
+                <button class="btn btn-dark dropdown-toggle" id="UploadgradeDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                    Grade Level
+                </button>
+                <ul class="dropdown-menu" id="UploadgradeDropdownMenu" aria-labelledby="UploadgradeDropdownBtn">
+                    <!-- Dropdown options will be dynamically populated here -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-12 text-center dropdown-container">
+            <div class="dropdown-item-container">
+                <button class="btn btn-dark dropdown-toggle" id="UploadsectionDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                    Section
+                </button>
+                <ul class="dropdown-menu" id="UploadsectionDropdownMenu" aria-labelledby="UploadsectionDropdownBtn">
+                    <!-- Dropdown options will be dynamically populated here -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-12 text-center dropdown-container">
+            <div class="dropdown-item-container">
+                <button class="btn btn-dark dropdown-toggle" id="UploadsubjectDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                    Subject
+                </button>
+                <ul class="dropdown-menu" id="UploadsubjectDropdownMenu" aria-labelledby="UploadsubjectDropdownBtn">
+                    <!-- Dropdown options will be dynamically populated here -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-12 text-center dropdown-container">
+            <div class="dropdown-item-container">
+                <button class="btn btn-dark dropdown-toggle" id="UploadquarterDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                    Quarter
+                </button>
+                <ul class="dropdown-menu" id="UploadquarterDropdownMenu" aria-labelledby="UploadquarterDropdownBtn">
+                    <!-- Dropdown options will be dynamically populated here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <br/>
+
+    <div class="col-lg-3 col-md-6 col-sm-12 text-center">
+        <div class="dropdown-item-container">
+            <button class="btn btn-primary btn-sm mx-auto" id="SaveButton" onclick="saveAndUpdate()" aria-expanded="false">
+                Save & Update
+            </button>
+        </div>
+    </div>
+    
+    
+
+    <div class="row justify-content-center">
+        <div class="col-lg-2 col-xs-12 text-center">
+            <div class="row justify-content-center">
+                <div class="col-8 text-center">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th colspan="4">Answer Key</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if answer_key|length <= 10 %}
+                            {% for ans in answer_key %}
+                                <tr>
+                                    <th>{{ loop.index }}</th>
+                                    <td>{{ ans }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            {% for i in range(answer_key|length // 2) %}
+                                <tr>
+                                    <th>{{ i + 1 }}</th>
+                                    <td>{{ answer_key[i*2] }}</td>
+                                    {% if i*2 + 1 < answer_key|length %}
+                                        <th>{{ i + 1 + answer_key|length // 2 }}</th>
+                                        <td>{{ answer_key[i*2 + 1] }}</td>
+                                    {% else %}
+                                        <th>{{ i + 1 + answer_key|length // 2 }}</th>
+                                        <td></td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                            {% if answer_key|length % 2 != 0 %}
+                                <tr>
+                                    <th>{{ answer_key|length }}</th>
+                                    <td>{{ answer_key[-1] }}</td>
+                                    <th></th>
+                                    <td></td>
+                                </tr>
+                            {% endif %}
+                        {% endif %}
+                        
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9 col-xs-12">
+            <table class="table table-hover" style="width: 100%">
+                <colgroup>
+                    <col span="1" style="width: 5%" />
+                    <col span="1" style="width: 20%" />
+                    <col span="1" style="width: 6%" />
+                    <col span="1" style="width: 6%" />
+                    <col span="1" style="width: 6%" />
+                    <col span="1" style="width: 7%" />
+                    <col span="1" style="width: 35%" />
+                    <col span="1" style="width: 25%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>LRN</th>
+                        <th>Name </th>
+                        <th class="text-center">Correct</th>
+                        <th class="text-center">Mistake</th>
+                        <th class="text-center">Invalid</th>
+                        <th class="text-center">Percentage</th>
+                        <th class="text-center">List of Answers</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key in scores %}
+                        <tr>
+                            <td class="v-align-center">{{ loop.index0+1 }}</td>
+                            <td class="v-align-center">
+                                <img src="{{ scores[key][2] }}" style="height: auto; width: 100%; max-height: 50px;" alt="">
+                            </td>
+                            <td class="v-align-center text-center">
+                                <span class="badge badge-pill badge-success text-center">{{ scores[key][3] }}</span>
+                            </td>
+                            <td class="v-align-center text-center">
+                                <span class="badge badge-pill badge-danger text-center">{{ scores[key][4] }}</span>
+                            </td>
+                            <td class="v-align-center text-center">
+                                <span class="badge badge-pill badge-primary text-center">{{ scores[key][5] }}</span>
+                            </td>
+                            <td class="v-align-center text-center">{{ scores[key][1] }} %</td>
+                            <td class="v-align-center text-center">
+                                {{ " ".join(scores[key][0]) }}
+                            </td>
+                            <td class="v-align-center text-right">
+                                <button type="button" class="btn btn-gray br-50px" data-toggle="modal" data-target="#img-{{ loop.index0 }}">
+                                    <i class="fas fa-search"></i>&nbsp;Review the Paper
+                                </button>
+                            </td>
+
+                        </tr>
+                        <div class="modal" id="img-{{ loop.index0 }}">
+                            <div class="modal-dialog modal-md">
+                                <div class="modal-content">
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Answer Sheet</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <a id="link" href="{{ key }}" download=>
+                                            <img src="{{ key }}" style="max-width: 100%" alt="">
+                                        </a>
+                                    </div>
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger br-50px" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+
+
+{# Display both correct and wrong answers in one table #}
+<div class="col-lg-12 col-xs-12 text-center">
+    <div class="row justify-content-center">
+        <div class="col-8 text-center">
+           
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th>Item Number</th>
+                        <th>Correct Answer</th>
+                        <th>Total Correct Answers</th>
+                        <th>Total Wrong Answers</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(answer_key | length) %}
+                        <tr>
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ answer_key[i] }}</td>
+                            <td>{{ total_wrong_answers.get(i, 0) }}</td>
+                            <td>{{ total_correct_answers.get(i, 0) }}</td>
+                            <td>
+                                {% if total_papers %}
+                                    {{ '{:.2%}'.format(total_correct_answers.get(i + 1, 0) / total_papers) }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+</div>
+
+
+<style>
+    .dropdown-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .dropdown-item-container {
+        margin-bottom: 10px;
+    }
+
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Fetch dropdown data when the page loads
+        fetchDropdownData();
+    });
+
+    // Function to fetch data for all dropdowns
+    function fetchDropdownData() {
+        $.get("/Upload_grade_dropdown_data", function (data) {
+            populateDropdown("UploadgradeDropdownMenu", data);
+        });
+        $.get("/Upload_section_dropdown_data", function (data) {
+            populateDropdown("UploadsectionDropdownMenu", data);
+        });
+        $.get("/Upload_subject_dropdown_data", function (data) {
+            populateDropdown("UploadsubjectDropdownMenu", data);
+        });
+        $.get("/Upload_quarter_dropdown_data", function (data) {
+            populateDropdown("UploadquarterDropdownMenu", data);
+        });
+    }
+
+    // Function to populate a dropdown with data
+    function populateDropdown(dropdownId, data) {
+        $("#" + dropdownId).empty();
+        data.forEach(function (option) {
+            $("#" + dropdownId).append("<li><a class='dropdown-item' href='#' onclick='selectDropdownOption(this)'>" + option + "</a></li>");
+        });
+    }
+
+    // Function to select the dropdown option and update the dropdown name
+    function selectDropdownOption(element) {
+        var selectedOption = $(element).text();
+        var dropdownId = $(element).closest(".dropdown-item-container").find("button").attr("id");
+        $("#" + dropdownId).text(selectedOption);
+        
+        // Set the value of the hidden input field with the selected option
+        $("#" + dropdownId.replace("DropdownBtn", "")).val(selectedOption);
+        
+        // Remove 'selected' class from all options and add it to the selected option
+        $(element).closest('.dropdown-menu').find('.dropdown-item').removeClass('selected');
+        $(element).addClass('selected');
+    }
+
+    // Function to validate dropdowns before form submission
+    function validateDropdowns() {
+        // Check if all dropdowns have been selected
+        var gradeLevel = $("#UploadgradeDropdownBtn").text().trim();
+        var section = $("#UploadsectionDropdownBtn").text().trim();
+        var subject = $("#UploadsubjectDropdownBtn").text().trim();
+        var quarter = $("#UploadquarterDropdownBtn").text().trim();
+
+        // Check if any dropdown is empty
+        if (gradeLevel === "Grade Level" || section === "Section" || subject === "Subject" || quarter === "Quarter") {
+            alert("Please select values for all dropdowns.");
+            $("#uploadBtn").prop("disabled", true); // Disable the upload button
+            return false; // Prevent form submission
+        } else {
+            $("#uploadBtn").prop("disabled", false); // Enable the upload button
+        }
+
+        return true; // Allow form submission
+    }
+
+    // Function to handle form submission
+    function submitForm() {
+        // Validate dropdowns before submission
+        if (!validateDropdowns()) {
+            return false; // Prevent form submission
+        }
+
+        // Get selected dropdown values
+        var gradeLevel = $("#UploadgradeDropdownBtn").text();
+        var section = $("#UploadsectionDropdownBtn").text();
+        var subject = $("#UploadsubjectDropdownBtn").text();
+        var quarter = $("#UploadquarterDropdownBtn").text();
+        
+        // Get uploaded file
+        var file = $("#answerKey")[0].files[0];
+        
+        // Create form data object
+        var formData = new FormData();
+        formData.append("grade_level", gradeLevel);
+        formData.append("section", section);
+        formData.append("subject", subject);
+        formData.append("quarter", quarter);
+        formData.append("file", file);
+    
+    // Send form data to server using AJAX
+    $.ajax({
+        url: "/uploadAnswerKey",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            // Handle success response
+            console.log("Upload successful");
+            // Redirect to desired page
+            window.location.href = "/uploadPapers";
+        },
+        error: function(xhr, status, error) {
+            // Handle error response
+            console.error("Error uploading file:", error);
+        }
+    });
+    
+    // Prevent default form submission
+    return false;
+}
+
+// Add event listener to the form submission
+$("#uploadForm").submit(submitForm);
+</script>
+
+<script type="text/javascript">
+    function saveAndUpdate() {
+        // Gather data from dropdowns
+        var gradeLevel = $("#UploadgradeDropdownBtn").text().trim();
+        var section = $("#UploadsectionDropdownBtn").text().trim();
+        var subject = $("#UploadsubjectDropdownBtn").text().trim();
+        var quarter = $("#UploadquarterDropdownBtn").text().trim();
+
+        // Check if any dropdown is empty
+        if (gradeLevel === "Grade Level" || section === "Section" || subject === "Subject" || quarter === "Quarter") {
+            alert("Please select values for all dropdowns.");
+            return;
+        }
+
+        // Prepare data for AJAX request
+        var data = {
+            grade_level: gradeLevel,
+            section: section,
+            subject: subject,
+            quarter: quarter
+        };
+
+        // Send AJAX request to update exam_operations_id
+        $.ajax({
+            url: "/updateExamOperationsId",
+            type: "POST",
+            data: data,
+            success: function(response) {
+                // Handle success response
+                alert("Exam operations ID updated successfully.");
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error("Error updating exam operations ID:", error);
+            }
+        });
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

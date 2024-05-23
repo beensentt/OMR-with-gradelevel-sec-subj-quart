@@ -1,0 +1,392 @@
+{% extends "layout.html" %}
+{% block body %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+
+<div class="container">
+    <div class="jumbotron text-center">
+        <h1>My Account</h1>
+        <p class="lead">{{ user.first_name }} {{ ' ' }} {{ user.last_name }}</p>
+
+
+
+    </div>
+  
+
+    <div class="container d-flex justify-content-center">
+        <div class="card text-bg-danger mb-3 p-3 mr-2" style="max-width: 18rem;">
+            <div class="card-header "><h5>Number of Examinees:</h5></div>
+            <div class="card-body">
+                <h1 id="examineesCount" class="card-title text-center pt-3">Loading...</h1>
+            </div>
+        </div>
+    
+        <div class="card text-bg-danger mb-3 p-2 mr-2" style="max-width: 18rem;">
+            <div class="card-header"><h5>Number of Students who Passed:</h5></div>
+            <div class="card-body">
+                <h1 id="passedCount" class="card-title text-center">Loading...</h1>
+            </div>
+        </div>
+    
+        <div class="card text-bg-danger mb-3 p-2" style="max-width: 18rem;">
+            <div class="card-header"><h5>Number of Students who Failed:</h5></div>
+            <div class="card-body">
+                <h1 id="failedCount" class="card-title text-center">Loading...</h1>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+    
+    
+            <div> 
+                <!-- Start of tab -->
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <!-- Anchor link for the Course tab -->
+                        <a class="nav-link active" aria-current="page" href="#course-content" onclick="changeActiveTab('course-content')">Course</a>
+                    </li>
+                    <li class="nav-item">
+                        <!-- Anchor link for the Student tab -->
+                        <a class="nav-link" aria-current="page" href="#student-content" onclick="changeActiveTab('student-content')">Student</a>
+                    </li>
+                </ul>
+                <!-- End of tab -->
+    
+
+                     <!-- Content for Course tab -->
+                <div id="course-content" class="tab-content">
+                    <div class="container">
+                        
+                        {% if exam_operations|length > 0 %}
+                        <div class="col-lg-12 col-xs-12">
+                            <table class="table table-hover" style="width: 100%">
+                                <colgroup>
+                                    <col span="1" style="width: 5%" />
+                                    <col span="1" style="width: 20%" />
+                                    <col span="1" style="width: 45%" />
+                                    <col span="1" style="width: 10%" />
+                                    <col span="1" style="width: 20%" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th class="text-center">History</th>
+                                        <th class="text-center">Answer Key.</th>
+                                        <th class="text-center">Number of Sheets</th>
+                                        <th class="text-center"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for op in exam_operations %}
+                                    <tr>
+                                        <td class="v-align-center">{{ loop.index0 + 1 }}</td>
+                                        <td class="v-align-center text-center">{{ op[0] }}</td>
+                                        <td class="v-align-center text-center">{{ op[2] }}</td>
+                                        <td class="v-align-center text-center">{{ op[3] }}</td>
+                                        <td class="v-align-center text-right">
+                                            <a type="button" class="btn btn-gray br-50px" href="/detail?id={{ op[0] }}">
+                                                <i class="fas fa-search"></i>&nbsp;Details
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div> 
+                        {% endif %} 
+                        {% if exam_operations|length == 0 %}
+                        <div class="alert alert-warning">You have not made a transaction before.</div>
+                        {% endif %}
+                        <br/>
+
+
+</div>
+
+                        
+
+</div>
+  
+
+
+   
+
+
+        <!-- Content for Student tab -->
+        <div id="student-content" class="tab-content" style="display: none;">
+            <div class="container">
+            <br/>
+                        
+            <div class="container">
+                <div><h5>Score Analytics :</h5></div>
+            
+                <br/>
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-12 col-xs-12">
+                            <!-- Add canvas element for the chart -->
+                            <canvas id="scoreChart" width="800" height="400"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+            </div>
+
+                
+                <div>
+                    <h5>Students Status :</h5>
+                </div>
+                <br/>
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12">
+                            <!-- Add canvas element for the chart -->
+                            <canvas id="StudentStatusChart" width="800" height="400"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        // Make AJAX request to fetch data for the chart
+                        fetch('/api/examinees-analytics-v2')
+                            .then(response => response.json())
+                            .then(data => {
+                                // Extract the number of examinees from the fetched data
+                                const number_of_examinees = data.number_of_examinees;
+            
+                                // Configure the chart data
+                                const chartData = {
+                                    labels: ['Number of Examinees'],
+                                    datasets: [{
+                                        label: 'Number of Examinees',
+                                        data: [number_of_examinees],
+                                        backgroundColor: 'rgb(255, 99, 132)' // Red color for the pie chart
+                                    }]
+                                };
+            
+                                // Get the canvas element
+                                const canvas = document.getElementById('examineesChart').getContext('2d');
+            
+                                // Create the pie chart
+                                new Chart(canvas, {
+                                    type: 'pie', // Set chart type to 'pie'
+                                    data: chartData,
+                                    options: {
+                                        responsive: true,
+                                        maintainAspectRatio: false
+                                    }
+                                });
+                            })
+                            .catch(error => {
+                                console.error('Error fetching data:', error);
+                            });
+                    });
+                </script>
+                
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        // Make AJAX request to fetch data for the chart
+                        fetch('/api/score-analytics-v2')
+                            .then(response => response.json())
+                            .then(data => {
+                                // Prepare data for the chart
+                                const labels = data.labels;
+                                const dataPoints = data.data;
+            
+                                // Get the canvas element
+                                const ctx = document.getElementById('scoreChart').getContext('2d');
+            
+                                // Render the bar chart
+                                new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: labels,
+                                        datasets: [{
+                                            label: 'Scores',
+                                            data: dataPoints,
+                                            backgroundColor: 'rgba(255, 0, 0)', // Background color of bars
+                                            borderColor: 'rgba(255, 0, 0)', // Border color of bars
+                                            borderWidth: 1 // Border width of bars
+                                        }]
+                                    },
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true // Start y-axis from 0
+                                            }
+                                        }
+                                    }
+                                });
+                            })
+                            .catch(error => console.error('Error fetching data:', error));
+                    });
+                </script>
+
+
+
+
+
+            
+
+
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        // Make AJAX request to fetch data for the chart
+                        fetch('/api/examinees-analytics-v2')
+                            .then(response => response.json())
+                            .then(data => {
+                                const examineesCountDiv = document.getElementById('examineesCount');
+                                // Replace the placeholder with the fetched number of examinees
+                                examineesCountDiv.textContent = data.number_of_examinees;
+                            });
+                    });
+                </script>   
+        </script>
+
+
+        <script>
+            // Fetch data from Flask API
+            fetch('/api/status-analytics-v2')
+                .then(response => response.json())
+                .then(data => {
+                    // Update passed count
+                    document.getElementById('passedCount').textContent = data.passed;
+
+                    // Update failed count
+                    document.getElementById('failedCount').textContent = data.failed;
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Make AJAX request to fetch data for the chart
+                fetch('/api/status-analytics-v2')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Get the canvas element
+                        const canvas = document.getElementById('StudentStatusChart').getContext('2d');
+
+                        // Calculate total number of students
+                        const totalStudents = data.passed + data.failed;
+
+                        // Calculate percentages and round off to the nearest whole number
+                        const passedPercentage = Math.round((data.passed / totalStudents) * 100);
+                        const failedPercentage = Math.round((data.failed / totalStudents) * 100);
+
+                        // Create the pie chart
+                        new Chart(canvas, {
+                            type: 'pie',
+                            data: {
+                                labels: ['Passed', 'Failed'],
+                                datasets: [{
+                                    data: [passedPercentage, failedPercentage],
+                                    backgroundColor: ['silver', 'red']
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                tooltips: {
+                                    callbacks: {
+                                        label: function(tooltipItem, data) {
+                                            const dataset = data.datasets[tooltipItem.datasetIndex];
+                                            const currentValue = dataset.data[tooltipItem.index];
+                                            const label = data.labels[tooltipItem.index];
+                                            return label + currentValue + "%";
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+            });
+        </script>
+
+
+        {# SCORE ANALYSIS DELETION#}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const deleteBtn = document.getElementById('deleteScoreAnalyticsBtn');
+                deleteBtn.addEventListener('click', function () {
+                    // Send AJAX request to delete score analytics
+                    fetch('/api/delete-score-analytics', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Handle success or error response
+                        if (data.success) {
+                            alert('Score analytics deleted successfully.');
+                            // Reload the page or update the UI as needed
+                            location.reload();
+                        } else {
+                            alert('Failed to delete score analytics: ' + data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting score analytics:', error);
+                        alert('Failed to delete score analytics. Please try again later.');
+                    });
+                });
+            });
+        </script>
+
+
+
+
+                    </div>
+                </div>
+                <br/>
+            </div>
+            
+            
+            <!-- JS For tab -->
+            <script>
+                function changeActiveTab(tabId) {
+                    console.log("Clicked tab: ", tabId);
+                    
+                    // Remove 'active' class from all tab links
+                    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                    // Add 'active' class to the clicked tab link
+                    document.querySelector('a[href="#' + tabId + '"]').classList.add('active');
+            
+                    // Hide all tab contents
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.style.display = 'none';
+                    });
+            
+                    // Show the corresponding tab content
+                    console.log("Displaying tab content for: ", tabId);
+                    document.getElementById(tabId).style.display = 'block';
+                }
+            </script>
+            
+            
+            
+            
+            
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
+
+
+{% endblock %}
